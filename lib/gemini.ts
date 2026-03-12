@@ -1,9 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.GEMINI_API_KEY;
+export function getGeminiClient() {
+  const apiKey = process.env.GEMINI_API_KEY;
 
-if (!apiKey) {
-  throw new Error("Missing GEMINI_API_KEY in .env.local");
+  if (!apiKey) {
+    throw new Error("Missing GEMINI_API_KEY environment variable");
+  }
+
+  return new GoogleGenAI({ apiKey });
 }
-
-export const gemini = new GoogleGenAI({ apiKey });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { gemini } from "@/lib/gemini";
+import { getGeminiClient } from "@/lib/gemini";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,12 +17,15 @@ export async function POST(req: NextRequest) {
       .map((m: { role: string; content: string }) => `${m.role}: ${m.content}`)
       .join("\n");
 
+    const gemini = getGeminiClient();
+
     const response = await gemini.models.generateContent({
       model: "gemini-2.5-flash",
       contents: conversation,
     });
 
-    const answer = response.text || "No response generated.";
+    const answer =
+      response?.text || "No response generated.";
 
     return NextResponse.json({ answer });
   } catch (error) {
